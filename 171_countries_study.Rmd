@@ -159,4 +159,4 @@ That is funny: of course we see by the ordering of the data points that these da
 
 ## Concluding remarks
 
-According to this little exercise mean cholesterol does either not have any value for predicting the death by cardiovascular disease (and probably just has nothing to do with it?) or the analysis is good enough to find anything (e.g. by averaging out individual differences). Yet, it is important to note: the original study had the same fundamental problems, since the design was identical, but the WHO data are of higher quality and quantity.
+According to this little exercise mean cholesterol does either not have any value for predicting death by cardiovascular disease (and probably just has nothing to do with it?) or the analysis is just not good enough to answer this question (e.g. by averaging out individual differences and not being able to take into account further risk factors). Yet, it is important to note: the original study had the same fundamental problems, since the design was identical, but the WHO data are of higher quality and quantity.
