@@ -1,2 +1,3 @@
-# 171_countries
-A simple exercise on the famous seven countries study using WHO data from 2000
+# The 171 countries study - revisiting the classic by Ancel Keys
+
+In this repo you can find a simple exercise on redoing the famous [Seven Countries Study] by Ancel Keys, extended to 171 countries using WHO data. For further details, background and motivation see the complete description [here](171_countries_study.html). I did this for a side project, but thought that people might be interested (and to make the code public, of course). This little project could also well be used for a statistics class.
