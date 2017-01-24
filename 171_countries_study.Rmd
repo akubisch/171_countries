@@ -1,8 +1,8 @@
 ---
 title: "The 171 countries study - revisiting the classic by Ancel Keys"
 author: "Dr. Alexander Kubisch"
-date: "January 24, 2017"
-output: html_document
+date: "January 24, 2017 - github.com/akubisch/171_countries"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +26,9 @@ All data used in this study are obtained from the [Global Health Observatory dat
 ```{r warning=FALSE}
 library(rgho) # loading the library
 
-# the GHO code for the deaths of cardiovascular diseases per 100.000 inhabitants is WHS2_131 (which I actually had to extract from the GHO homepage, since the codes provided by the R package seem to be incorrect in this case)
+# the GHO code for the deaths of cardiovascular diseases per 100.000 inhabitants is
+# WHS2_131 (which I actually had to extract from the GHO homepage, since the codes 
+# provided by the R package seem to be incorrect in this case).
 # the adequate code for the age-standardized mean total cholesterol is CHOL_03
 
 # 1. cholesterol data
@@ -45,43 +47,56 @@ sort(unique(cvd$YEAR))
 
 ### picking a year
 
-#I will thus in the following concentrate on the year 2000, for which we have both variables available
+# I will thus in the following concentrate on the year 2000, for which we have both
+# variables available
 chol_2000 = subset(chol,YEAR==2000)
 
-# and average only the mean numeric value across sexes (not perfect yet, but good enough for a first glimpse)
+# and average only the mean numeric value across sexes (not perfect yet, but good 
+# enough for a first glimpse)
 chol_2000 = tapply(chol_2000$Numeric,list(chol_2000$COUNTRY),mean)
 
-# we now have data on all 193 WHO member states - for each country the mean total cholesterol of all people over age 25
+# we now have data on all 193 WHO member states - for each country the mean total
+# cholesterol of all people over age 25
 length(chol_2000)
 
-# here we need to make sure that the cause of death is cardiovascular disease, coded as "GHE110" and we choose only the "both sexes" value, which is a better estimate than the mean of males and females
+# here we need to make sure that the cause of death is cardiovascular disease, coded 
+# as "GHE110" and we choose only the "both sexes" value, which is a better estimate 
+# than the mean of males and femalse
 cvd_2000 = subset(cvd,YEAR==2000&GHECAUSES=="GHE110"&SEX=="BTSX")
-# thus no need to average anything, so this just extracts the mean value, but keeps the country information
+# thus no need to average anything, so this just extracts the mean value, but keeps 
+# the country information
 cvd_2000 = tapply(cvd_2000$Numeric,list(cvd_2000$COUNTRY),mean)
 
-# since we have only data for about 170 countries on cvd, but far more for cholesterol levels, we need to extract the relevant ones from the latter. therefore, we first extract the countrie names lists:
+# since we have only data for about 170 countries on cvd, but far more for 
+# cholesterol levels, we need to extract the relevant ones from the latter. 
+# therefore, we first extract the countrie names lists:
 
 chol_cs = unlist(dimnames(chol_2000))
 cvd_cs = unlist(dimnames(cvd_2000))
 
-# since we seem to have more data on cholesterol, let's extract only those countries, for which we do have the according cvd data:
+# since we seem to have more data on cholesterol, let's extract only those countries, 
+# for which we do have the according cvd data:
 
 chol_2000 = chol_2000[which(chol_cs %in% cvd_cs)]
 
 length(chol_2000); length(cvd_2000)
 
-# comparing the length, we do, however, notice that now we have one further data point for cvd than for cholesterol. let's find out, for which country we do not have cholesterol data:
+# comparing the length, we do, however, notice that now we have one further data point 
+# for cvd than for cholesterol. let's find out, for which country we do not have
+# cholesterol data:
 
 which(unlist(dimnames(chol_2000))!=unlist(dimnames(cvd_2000)))
 
-# aha, the first one is element 145, from which the problems arise. this is "unlist(dimnames(cvd_2000))[145]"=="SSD". we remove this element from our cvd list:
+# aha, the first one is element 145, from which the problems arise. this is
+# "unlist(dimnames(cvd_2000))[145]"=="SSD". we remove this element from our cvd list:
 
 cvd_2000 = cvd_2000[-145]
 
 # final check:
 table(unlist(dimnames(chol_2000))==unlist(dimnames(cvd_2000)))
 
-# finally I will transform the cholesterol data to the in our regions typical dimensions of mg/dl (as they have been delivered in mmol/l)
+# finally I will transform the cholesterol data to the in our regions typical dimensions 
+# of mg/dl (as they have been delivered in mmol/l)
 
 chol_2000 = chol_2000 * 38.67
 
@@ -90,32 +105,32 @@ chol_2000 = chol_2000 * 38.67
 
 ## A short look onto the older data:
 
-I would like to compare the following results with the original data from Keys. Unfortunately I was not able to find the raw data or online versions of the graphs (I know, that had been different times). Yet, I could at least find one from a preliminary study, reused by Yerushalmy and Hilleboe (1957, Stat J Med 57: 2343-54):
+I would like to compare the following results with the original data from Keys. Unfortunately I was not able to find the raw data or online versions of the graphs (I know, that had been different times). Yet, I could at least find one from a preliminary study, reused by Yerushalmy and Hilleboe (1957, Stat J Med 57: 2343-54). What a correlation:
 
-![](yerushalmy.jpg)
-
-What an impressive correlation! Let's see, what we find:
+```{r, out.width = "400px", echo=FALSE}
+knitr::include_graphics("yerushalmy.jpg")
+```
 
 ## New regression results:
 
-```{r echo=FALSE}
-par(mar=c(5,5,1,1),bty="l")
+```{r echo=FALSE, out.width = "400px"}
+par(mar=c(5,7,1,1),bty="l")
 x = as.numeric(chol_2000)
 y = as.numeric(cvd_2000)
-plot(x,y,cex.axis=1.25,cex.lab=1.5,xlab="Mean total cholesterol (age-standardized; mg/dl)",
-     ylab="Deaths by cardiovascular disease per 100,000",cex=1.5,pch=16)
+plot(x,y,cex.axis=1.05,cex.lab=1.25,xlab="Mean total cholesterol (age-standardized; mg/dl)",
+     ylab="Deaths by cardiovascular disease\n per 100,000",cex=1.05,pch=16)
 m1 = lm(y~x)
 abline(m1,lwd=2,col="red")
-text(220,700,"adj. R²=0.034",adj=1,cex=1.75)
+text(220,700,expression(paste("adj. ",R^2,"=0.034")),adj=1,cex=1.5)
 ```
 
-This looks like a pretty bad predictor for CVD deaths. The explained variance is close to zero. Funnily, the estimated slope is significant (P<0.01), and it is negative (-1.48)... 
+This looks like a pretty bad predictor for CVD deaths. The explained variance is close to zero. If at all, there could be a hint towards a negative relationship, but given an $R^2$ of 0.034, no further discussion is necessary.
 
 ## One last note on statistics...
 
 I thought it would be fun to extract the countries from the original curve shown earlier by Yerushalmy and Hilleboe and do the regression only with these:
 
-```{r echo=FALSE}
+```{r echo=FALSE, out.width = "400px"}
 country_names=unlist(dimnames(chol_2000))
 orig_countries = c("USA","CAN","AUS","GBR","ITA","JPN")
 orig_pos = which(country_names %in% orig_countries)
@@ -123,24 +138,24 @@ orig_pos = which(country_names %in% orig_countries)
 chol_orig = chol_2000[orig_pos]
 cvd_orig = cvd_2000[orig_pos]
 
-par(mar=c(5,5,1,1),bty="l")
+par(mar=c(5,7,1,1),bty="l")
 x = as.numeric(chol_2000)
 y = as.numeric(cvd_2000)
-plot(x,y,cex.axis=1.25,cex.lab=1.5,xlab="Mean total cholesterol (age-standardized; mg/dl)",
-     ylab="Deaths by cardiovascular disease per 100,000",cex=1.5,pch=16,col="grey75")
+plot(x,y,cex.axis=1.05,cex.lab=1.25,xlab="Mean total cholesterol (age-standardized; mg/dl)",
+     ylab="Deaths by cardiovascular disease\n per 100,000",cex=1.05,pch=16,col="grey75")
 
 x = as.numeric(chol_orig)
 y = as.numeric(cvd_orig)
-
-points(x,y,cex=2,pch=16)
-text(y~x,labels=sort(orig_countries),pos=c(4,2,4,4,4,4))
-
 m1 = lm(y~x)
 abline(m1,lwd=2,col="red")
-text(220,700,"adj. R²=0.234",adj=1,cex=1.75)
+points(x,y,cex=1.05,pch=16)
+text(y~x,labels=sort(orig_countries),pos=c(4,2,4,4,4,4))
+
+
+text(220,700,expression(paste("adj. ",R^2,"=0.234")),adj=1,cex=1.5)
 ```
 
-That is funny: of course we see by the ordering of the data points that these data do not resemble the original ones. Yet, just based on the low sample size, these six nations (which seem to suffer fairly weakly from CVD) would indicate a positive relationship, as suggested by Keys et al.; the explained variance is higher by accident. You should always avoid low sample size.
+That is funny: of course we see by the ordering of the data points that these data do not resemble the original ones perfectly (but see Japan). Yet, just based on the low sample size, these six nations (which seem to suffer fairly weakly from CVD) would indicate a positive relationship, as suggested by Keys et al.; the explained variance is higher by accident. You should always avoid low sample size. The statistics can never be better than the data.
 
 ## Concluding remarks
 
