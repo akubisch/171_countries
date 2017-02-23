@@ -9,6 +9,8 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+*One note before: To see links and be able to follow them, please open the original .Rmd file.*
+
 ## Introductory words
 
 This script leads through a very short analysis, I performed for a small side project I'm currently involved in. This side project deals with the current understanding of the role of cholesterol (and diet) on the risk of cardiovascular diseases. As it turned out, still many involved people cite the classic study of Ancel Keys, which is based on data on diet and health from men from seven countries, collected in the 1960s. [Published](https://www.cabdirect.org/cabdirect/abstract/19711403775) in 1970, this analysis was the foundation for the currently still prevalent idea of 'bad' cholesterol. From the information I have sighted so far, I start to doubt that there is much scientific merit in the cholesterol hypothesis (very interesting publications can be found e.g. [here](http://www.egms.de/static/en/journals/gms/2007-5/000040.shtml), [here](http://www.mdpi.com/2072-6643/7/10/5429) and [here](http://www.scirp.org/journal/PaperInformation.aspx?PaperID=34065) ). And never to forget [this](http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0020124).
